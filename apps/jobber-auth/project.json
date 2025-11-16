@@ -43,7 +43,9 @@
       "dependsOn": ["build"],
       "options": {
         "buildTarget": "jobber-auth:build",
-        "runBuildTargetDependencies": true
+        "runBuildTargetDependencies": true,
+        "watch": true,
+        "inspect": false
       },
       "configurations": {
         "development": {

@@ -9,6 +9,7 @@ module.exports = {
       devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     }),
   },
+  stats: 'errors-warnings',
   plugins: [
     new NxAppWebpackPlugin({
       target: 'node',
