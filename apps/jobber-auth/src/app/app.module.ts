@@ -17,7 +17,11 @@ import { AuthModule } from './auth/auth.module';
       driver: ApolloDriver,
       context: ({ req, res }) => ({ req, res }),
       autoSchemaFile: true,
-      playground: true,
+      playground: {
+        settings: {
+          'request.credentials': 'include',
+        },
+      },
       introspection: true,
     }),
     UsersModule,
