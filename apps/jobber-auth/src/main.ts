@@ -10,6 +10,10 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(
@@ -17,7 +21,8 @@ async function bootstrap() {
       whitelist: true,
     })
   );
-  const port = app.get(ConfigService).getOrThrow<number>('AUTH_PORT') || 3000;
+
+  const port = app.get(ConfigService).getOrThrow<number>('PORT') || 3000;
   await app.listen(port);
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
