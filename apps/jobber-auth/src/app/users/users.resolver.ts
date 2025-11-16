@@ -9,7 +9,7 @@ import { TokenPayload } from '../auth/interfaces/token-payload.interface';
 
 @Resolver(() => User)
 export class UsersResolver {
-  private readonly logger = new Logger(UsersResolver.name);
+  private readonly logger = new Logger(UsersResolver.name, { timestamp: true });
 
   constructor(private readonly usersService: UsersService) {}
 

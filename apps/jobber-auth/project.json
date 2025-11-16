@@ -43,9 +43,7 @@
       "dependsOn": ["build"],
       "options": {
         "buildTarget": "jobber-auth:build",
-        "runBuildTargetDependencies": true,
-        "watch": true,
-        "inspect": false
+        "runBuildTargetDependencies": true
       },
       "configurations": {
         "development": {
@@ -54,6 +52,16 @@
         "production": {
           "buildTarget": "jobber-auth:build:production"
         }
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx build jobber-auth --watch",
+          "nodemon --delay 2 dist/apps/jobber-auth/main.js"
+        ],
+        "parallel": true
       }
     },
     "generate-types": {
