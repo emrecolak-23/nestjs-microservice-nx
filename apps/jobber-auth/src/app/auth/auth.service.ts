@@ -44,7 +44,7 @@ export class AuthService {
         throw new UnauthorizedException();
       }
       return existingUser;
-    } catch (err) {
+    } catch {
       throw new UnauthorizedException('Credential are not valid');
     }
   }

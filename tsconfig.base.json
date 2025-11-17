@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@jobber/nestjs": ["libs/nestjs/src/index.ts"]
+      "@jobber/nestjs": ["libs/nestjs/src/index.ts"],
+      "types/*": ["types/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
