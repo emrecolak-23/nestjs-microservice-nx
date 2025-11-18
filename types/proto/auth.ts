@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export const protobufPackage = 'auth';
 
 export interface AuthenticateRequest {
-  tokenz: string;
+  token: string;
 }
 
 export interface User {
