@@ -3,27 +3,17 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { join } from 'path';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import { ConfigService } from '@nestjs/config';
-import * as cookieParser from 'cookie-parser';
 import { GrpcOptions, Transport } from '@nestjs/microservices';
 import { AUTH_PACKAGE_NAME } from 'types/proto/auth';
-import { join } from 'path';
+import { init } from '@jobber/nestjs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
-  app.use(cookieParser());
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-    })
-  );
+  await init(app);
 
-  const port = app.get(ConfigService).getOrThrow<number>('PORT');
   app.connectMicroservice<GrpcOptions>({
     transport: Transport.GRPC,
     options: {
@@ -32,10 +22,6 @@ async function bootstrap() {
     },
   });
   app.startAllMicroservices();
-  await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
 }
 
 bootstrap();
