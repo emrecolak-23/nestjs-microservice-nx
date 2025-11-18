@@ -49,8 +49,8 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "nx build jobber-auth --watch",
-          "nodemon --delay 2 dist/apps/jobber-auth/main.js"
+          "nx build jobber-executor --watch",
+          "nodemon --delay 2 dist/apps/jobber-executor/main.js"
         ],
         "parallel": true
       }
