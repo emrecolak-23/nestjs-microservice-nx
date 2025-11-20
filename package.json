@@ -12,6 +12,7 @@
   ],
   "private": true,
   "dependencies": {
+    "@as-integrations/express5": "^1.1.2",
     "@nestjs/common": "^11.0.0",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.0",
@@ -70,6 +71,7 @@
     "tslib": "^2.3.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-merge": "^6.0.1"
   }
 }
