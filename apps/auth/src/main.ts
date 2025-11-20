@@ -11,7 +11,7 @@ import { AUTH_PACKAGE_NAME } from '@jobber/grpc';
 import { init } from '@jobber/nestjs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
   await init(app);
 
   app.connectMicroservice<GrpcOptions>({
