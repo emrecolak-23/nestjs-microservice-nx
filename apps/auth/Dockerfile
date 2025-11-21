@@ -2,6 +2,8 @@ FROM node:24-slim AS builder
 
 WORKDIR /workspace
 
+RUN apt-get update && apt-get install -y openssl 
+
 ENV HUSKY=0
 
 COPY package*.json ./
