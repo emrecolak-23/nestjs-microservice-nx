@@ -68,14 +68,106 @@ Nx Console is an editor extension that enriches your developer experience. It le
 
 Learn more:
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/nest?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
 - [Our Youtube channel](https://www.youtube.com/@nxdevtools)
 - [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+
+---
+
+## Helm Chart Deployment
+
+### Quick notes (English)
+
+These are the quick steps I used when testing the chart — you can follow them as a short checklist:
+
+- Create a Helm chart:
+
+  - `helm create jobber`
+
+- Edit templates:
+
+  - Update the files under `charts/jobber/templates/` (for example create or edit `deployment.yaml`, `service.yaml`, etc.) to match your application manifests.
+
+- Install the chart and create the namespace:
+
+  - `helm install jobber . -n jobber --create-namespace`
+
+- Verify namespace and pods:
+  - `kubectl get namespaces | grep jobber`
+  - `kubectl get po -n jobber`
+  - Example: describe a specific pod to inspect status and events:
+    - `kubectl describe po jobs-678848c49-sdxtc -n jobber`
+
+These commands are a minimal workflow to deploy the chart to a local or remote Kubernetes cluster.
+
+---
+
+### Pulling images from AWS ECR into Minikube (local cluster)
+
+If your images are stored in AWS ECR and you want to pull them into a local Minikube Docker environment, you can run the following example (replace placeholders):
+
+```sh
+# Point Docker CLI at Minikube's Docker daemon
+eval $(minikube docker-env)
+
+# Login to ECR (replace <AWS_REGION> and <AWS_ACCOUNT_ID>)
+aws ecr get-login-password --region <AWS_REGION> \
+	| docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com
+
+# Pull the image from your ECR repository
+docker pull <AWS_ACCOUNT_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com/jobber/jobs:latest
+
+# Install/upgrade the Helm chart using the pulled image (set imagePullPolicy=Never so Minikube uses local image)
+helm upgrade jobber . -n jobber --install --create-namespace \
+	--set global.imagePullPolicy=Never \
+	--set jobs.enabled=true \
+	--set auth.enabled=false \
+	--set executor.enabled=false
+
+# Check pods for the 'jobs' app
+kubectl get pods -n jobber -l app=jobs
+```
+
+**Notes:**
+
+- Ensure `minikube` is running before running the commands.
+- You must have AWS credentials configured locally (for example `aws configure`, or environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`).
+- Replace `<AWS_ACCOUNT_ID>` and `<AWS_REGION>` with your AWS account ID and region (for example `eu-north-1`).
+- Using `--set global.imagePullPolicy=Never` makes Kubernetes use the image already present in the Minikube Docker daemon.
+
+---
+
+### Adding PostgreSQL and Pulsar Dependencies
+
+After adding PostgreSQL and Pulsar as Helm chart dependencies:
+
+1. **Update Helm dependencies:**
+
+```sh
+   helm dependency update
+```
+
+2. **If you encounter "postgresql not found" error, create the PostgreSQL namespace:**
+
+```sh
+   kubectl create namespace postgresql
+```
+
+3. **Upgrade the Helm release:**
+
+```sh
+   helm upgrade jobber . -n jobber
+```
+
+4. **Verify that PostgreSQL pods are created:**
+
+```sh
+   kubectl get po -n postgresql
+```
+
+5. **Verify that Pulsar pods are created:**
+
+```sh
+   kubectl get po -n pulsar
+```
+
+**Note:** Make sure the namespace configurations in your `Chart.yaml` or `values.yaml` match the namespaces you create. If dependencies are installed in different namespaces, verify connectivity between services.
