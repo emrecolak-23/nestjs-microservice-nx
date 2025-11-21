@@ -68,7 +68,7 @@ jobs:
 
             {
               docker build \
-                -tag 655916713564.dkr.ecr.eu-north-1.amazonaws.com/jobber/$NAME:latest \
+                -t 655916713564.dkr.ecr.eu-north-1.amazonaws.com/jobber/$NAME:latest \
                 -f $DOCKERFILE \
                 . && docker push 655916713564.dkr.ecr.eu-north-1.amazonaws.com/jobber/$NAME:latest
             } &
