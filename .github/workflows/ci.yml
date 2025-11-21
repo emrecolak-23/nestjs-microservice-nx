@@ -42,3 +42,36 @@ jobs:
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: npx nx fix-ci
         if: always()
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push All Images To ECR
+        run: |
+          IMAGES=(
+            "jobs app/jobs/Dockerfile"
+            "executor app/executor/Dockerfile"
+            "auth app/auth/Dockerfile"
+          )
+
+          for image in "${IMAGES[@]}"; do
+            NAME=$(echo $image | cut -d' ' -f1)
+            DOCKERFILE=$(echo $image | cut -d' ' -f2)
+
+            {
+              docker build \
+                -tag 655916713564.dkr.ecr.eu-north-1.amazonaws.com/jobber/$NAME:latest \
+                -f $DOCKERFILE \
+                . && docker push 655916713564.dkr.ecr.eu-north-1.amazonaws.com/jobber/$NAME:latest
+            } &
+          done
+
+          wait
