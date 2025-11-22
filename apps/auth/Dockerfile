@@ -48,6 +48,7 @@ COPY --from=builder /workspace/apps/auth/package.json ./apps/auth/
 COPY --from=builder /workspace/libs/graphql/package.json ./libs/graphql/
 COPY --from=builder /workspace/libs/grpc/package.json ./libs/grpc/
 COPY --from=builder /workspace/libs/prisma/package.json ./libs/prisma/
+COPY --from=builder /workspace/apps/auth/prisma ./apps/auth/prisma
 
 ENV NODE_ENV=production
 
