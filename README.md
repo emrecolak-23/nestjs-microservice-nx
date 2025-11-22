@@ -171,3 +171,45 @@ After adding PostgreSQL and Pulsar as Helm chart dependencies:
 ```
 
 **Note:** Make sure the namespace configurations in your `Chart.yaml` or `values.yaml` match the namespaces you create. If dependencies are installed in different namespaces, verify connectivity between services.
+
+---
+
+### Scaling Deployments
+
+To scale the number of pod replicas for a deployment:
+
+```sh
+# Scale executor deployment to 5 replicas
+kubectl scale deployment executor --replicas 5 -n jobber
+
+# Verify the scaling
+kubectl get po -n jobber -l app=executor
+```
+
+This command is useful when you need to handle more load or want to test horizontal scaling of your services.
+
+---
+
+### Accessing Pulsar Pods and Monitoring Backlogs
+
+To access a Pulsar pod and monitor message backlogs:
+
+```sh
+# Enter the Pulsar broker pod
+kubectl exec -it jobber-pulsar-broker-0 -n pulsar -- sh
+
+# Once inside the pod, you can use Pulsar admin commands to monitor backlogs:
+# List topics
+bin/pulsar-admin topics list public/default
+
+# Check topic stats (includes backlog information)
+bin/pulsar-admin topics stats persistent://public/default/Fibonacci
+
+# List subscriptions for a topic
+bin/pulsar-admin topics subscriptions persistent://public/default/Fibonacci
+
+# Check subscription stats (backlog size)
+bin/pulsar-admin topics stats-internal persistent://public/default/Fibonacci
+```
+
+Replace `<topic-name>` with your actual Pulsar topic name. The backlog information shows how many unacknowledged messages are waiting to be consumed.
