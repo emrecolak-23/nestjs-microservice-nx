@@ -210,6 +210,12 @@ bin/pulsar-admin topics subscriptions persistent://public/default/Fibonacci
 
 # Check subscription stats (backlog size)
 bin/pulsar-admin topics stats-internal persistent://public/default/Fibonacci
+
+# Clear all backlogs in the public/default namespace
+bin/pulsar-admin namespaces clear-backlog public/default
+
+# Unsubscribe/remove a subscription from all topics in the namespace
+bin/pulsar-admin namespaces unsubscribe public/default --sub jobber
 ```
 
-Replace `<topic-name>` with your actual Pulsar topic name. The backlog information shows how many unacknowledged messages are waiting to be consumed.
+Replace `<topic-name>` with your actual Pulsar topic name. The backlog information shows how many unacknowledged messages are waiting to be consumed. Use the `clear-backlog` command carefully as it removes all unacknowledged messages from all topics in the namespace. The `unsubscribe` command removes the specified subscription from all topics in the namespace.
