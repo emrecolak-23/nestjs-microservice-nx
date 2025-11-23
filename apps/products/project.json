@@ -47,7 +47,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "nx build auth --watch",
+          "nx build products --watch",
           "nodemon --delay 2 dist/apps/products/main.js"
         ],
         "parallel": true

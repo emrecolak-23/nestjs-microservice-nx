@@ -7,7 +7,7 @@ import { join } from 'path';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { GrpcOptions, Transport } from '@nestjs/microservices';
-import { AUTH_PACKAGE_NAME } from '@jobber/grpc';
+import { Packages } from '@jobber/grpc';
 import { init } from '@jobber/nestjs';
 import { ConfigService } from '@nestjs/config';
 
@@ -19,7 +19,7 @@ async function bootstrap() {
     transport: Transport.GRPC,
     options: {
       url: app.get(ConfigService).getOrThrow<string>('AUTH_GRPC_SERVICE_URL'),
-      package: AUTH_PACKAGE_NAME,
+      package: Packages.AUTH,
       protoPath: join(__dirname, '../../libs/grpc/proto/auth.proto'),
     },
   });
