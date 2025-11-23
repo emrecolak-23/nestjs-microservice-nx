@@ -70,6 +70,19 @@
           "buildTarget": "products:build:production"
         }
       }
+    },
+    "generate-drizzle": {
+      "command": "drizzle-kit generate",
+      "options": {
+        "cwd": "{projectRoot}"
+      },
+      "cache": true
+    },
+    "migrate-drizzle": {
+      "command": "drizzle-kit migrate",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
     }
   }
 }

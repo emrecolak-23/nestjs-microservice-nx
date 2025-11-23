@@ -64,6 +64,8 @@ Nx Console is an editor extension that enriches your developer experience. It le
 
 [Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 
+---
+
 ## Useful links
 
 Learn more:
@@ -219,3 +221,27 @@ bin/pulsar-admin namespaces unsubscribe public/default --sub jobber
 ```
 
 Replace `<topic-name>` with your actual Pulsar topic name. The backlog information shows how many unacknowledged messages are waiting to be consumed. Use the `clear-backlog` command carefully as it removes all unacknowledged messages from all topics in the namespace. The `unsubscribe` command removes the specified subscription from all topics in the namespace.
+
+---
+
+## Database Migrations
+
+### Drizzle ORM (Products App)
+
+The `products` app uses Drizzle ORM for database management. To generate migrations after modifying your schema:
+
+```sh
+# Generate migration files based on schema changes
+npx drizzle-kit generate
+
+# Apply migrations to the database
+npx drizzle-kit migrate
+
+# Push migrations to the database (alternative to migrate)
+npx drizzle-kit push
+
+# Open Drizzle Studio to view/edit data
+npx drizzle-kit studio
+```
+
+Make sure your database connection is properly configured in `apps/products/drizzle.config.ts` before running these commands.
