@@ -14,7 +14,7 @@ import { join } from 'path';
           options: {
             url: configService.getOrThrow<string>('JOBS_GRPC_SERVICE_URL'),
             package: Packages.JOBS,
-            protoPath: join(__dirname, '../../libs/grpc/proto/JOB.proto'),
+            protoPath: join(__dirname, '../../libs/grpc/proto/job.proto'),
           },
         }),
         inject: [ConfigService],

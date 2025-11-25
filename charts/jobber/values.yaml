@@ -54,6 +54,7 @@ postgresql:
         create-dbs.sql: |
           CREATE DATABASE auth;
           CREATE DATABASE products;
+          CREATE DATABASE jobs;
   persistence:
     size: 1Gi
 
@@ -61,7 +62,9 @@ jobs:
   enabled: true
   replicas: 1
   image: '655916713564.dkr.ecr.eu-north-1.amazonaws.com/jobber/jobs:latest'
-  port: 3001
+  port: 
+    http: 3001
+    grpc: 5002
 
 executor:
   enabled: true
