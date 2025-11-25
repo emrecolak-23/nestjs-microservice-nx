@@ -31,8 +31,18 @@ export class JobsService implements OnModuleInit {
     );
   }
 
-  getJobs() {
+  getJobMetadata() {
     return this.jobs.map((job) => job.meta);
+  }
+
+  async getJobs() {
+    return this.prismaService.job.findMany();
+  }
+
+  async getJob(jobId: number) {
+    return this.prismaService.job.findUnique({
+      where: { id: jobId },
+    });
   }
 
   async executeJob(name: string, data: any) {
@@ -47,11 +57,10 @@ export class JobsService implements OnModuleInit {
       );
     }
 
-    await job.discoveredClass.instance.execute(
+    return job.discoveredClass.instance.execute(
       data.fileName ? this.getFile(data.fileName as string) : data,
       job.meta.name
     );
-    return job.meta;
   }
 
   private getFile(fileName?: string) {
