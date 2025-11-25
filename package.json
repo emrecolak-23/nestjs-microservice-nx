@@ -38,8 +38,7 @@
     "@jobber/graphql": "dist/libs/graphql/main",
     "@jobber/nestjs": "dist/libs/nestjs/main",
     "@jobber/pulsar": "dist/libs/pulsar/main",
-    "@jobber/prisma": "dist/libs/prisma/main",
-    "@jobber/products": "dist/libs/products/main"
+    "@jobber/prisma": "dist/libs/prisma/main"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
