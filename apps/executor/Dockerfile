@@ -14,12 +14,17 @@ COPY webpack.*.config.js ./
 
 COPY apps/executor/package.json ./apps/executor/
 COPY libs/pulsar/package.json ./libs/pulsar/
+COPY libs/grpc/package.json ./libs/grpc/
 
 RUN npm install
+
+RUN apt-get update && apt-get install -y protobuf-compiler
+
 
 COPY apps/executor ./apps/executor
 COPY libs/nestjs ./libs/nestjs
 COPY libs/pulsar ./libs/pulsar
+COPY libs/grpc ./libs/grpc
 
 
 COPY .nxignore* ./
@@ -36,6 +41,7 @@ COPY --from=builder /workspace/package.json ./
 COPY --from=builder /workspace/package-lock.json ./
 COPY --from=builder /workspace/apps/executor/package.json ./apps/executor/
 COPY --from=builder /workspace/libs/pulsar/package.json ./libs/pulsar/
+COPY --from=builder /workspace/libs/grpc/package.json ./libs/grpc/
 
 ENV NODE_ENV=production
 
