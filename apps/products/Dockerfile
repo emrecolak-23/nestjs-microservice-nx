@@ -38,6 +38,9 @@ COPY --from=builder /workspace/package.json ./
 COPY --from=builder /workspace/package-lock.json ./
 COPY --from=builder /workspace/apps/products/package.json ./apps/products/
 COPY --from=builder /workspace/libs/grpc/package.json ./libs/grpc/
+COPY --from=builder /workspace/apps/products/drizzle.config.ts ./apps/products/
+COPY --from=builder /workspace/apps/products/drizzle ./apps/products/
+
 
 ENV NODE_ENV=production
 
