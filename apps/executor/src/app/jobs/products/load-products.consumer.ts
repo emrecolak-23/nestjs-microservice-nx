@@ -12,29 +12,31 @@ import {
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import { JobConsumer } from '../job.consumer';
 
 @Injectable()
 export class LoadProductsConsumer
-  extends PulsarConsumer<LoadProductsMessage>
+  extends JobConsumer<LoadProductsMessage>
   implements OnModuleInit
 {
   private produtsService: ProductsServiceClient;
 
   constructor(
     pulsarClient: PulsarClient,
-    @Inject(Packages.PRODUCTS) private client: ClientGrpc
+    @Inject(Packages.JOBS) clientJobs: ClientGrpc,
+    @Inject(Packages.PRODUCTS) private clientProducts: ClientGrpc
   ) {
-    super(pulsarClient, Jobs.LOAD_PRODUCTS);
+    super(Jobs.LOAD_PRODUCTS, pulsarClient, clientJobs);
   }
 
   async onModuleInit(): Promise<void> {
-    this.produtsService = this.client.getService<ProductsServiceClient>(
+    this.produtsService = this.clientProducts.getService<ProductsServiceClient>(
       PRODUCTS_SERVICE_NAME
     );
     await super.onModuleInit();
   }
 
-  protected async onMessage(data: LoadProductsMessage): Promise<void> {
+  protected async execute(data: LoadProductsMessage): Promise<void> {
     await firstValueFrom(this.produtsService.createProduct(data));
   }
 }
